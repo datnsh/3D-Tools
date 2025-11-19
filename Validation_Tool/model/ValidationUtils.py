@@ -2,7 +2,6 @@ from pymxs import runtime as rt
 import re
 
 class ValidationUtils():
-
     def check_sub_selection(obj):
         selection = rt.getSelectionLevel(obj)
         if(str(selection) != 'object'):
