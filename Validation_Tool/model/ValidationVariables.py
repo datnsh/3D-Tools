@@ -1,3 +1,22 @@
+"""UI Variables"""
+TOOL_TITLE = 'Tool and Validation'
+FIRST_TAB = 'Wheel Checker'
+SECOND_TAB = 'Car Checker'
+COMBO_BOX_LIST = ['S0','S','0','1','2','3','4','5']
+
+FIRST_GROUP_BOX = 'LOD'
+FIRST_CHECK_BOX = 'Hide spindle'
+SECOND_CHECK_BOX = 'Hide morph'
+THIRD_CHECK_BOX = 'Hide blur'
+FOURTH_CHECK_BOX = 'Hide wheel'
+SECOND_GROUP_BOX = 'Wheel Checklist'
+
+
+THIRD_GROUP_BOX = 'UV Checker'
+
+
+
+"""Utilities Variables"""
 NAME_PATTERN = ''
 
 LOD_LIST = ['S0','S','0','1','2','3','4','5']
