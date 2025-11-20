@@ -1,28 +1,24 @@
+
 """UI Variables"""
 TOOL_TITLE = 'Tool and Validation'
 FIRST_TAB = 'Wheel Checker'
 SECOND_TAB = 'Car Checker'
 COMBO_BOX_LIST = ['S0','S','0','1','2','3','4','5']
-
 FIRST_GROUP_BOX = 'LOD'
 FIRST_CHECK_BOX = 'Hide spindle'
 SECOND_CHECK_BOX = 'Hide morph'
 THIRD_CHECK_BOX = 'Hide blur'
 FOURTH_CHECK_BOX = 'Hide wheel'
 SECOND_GROUP_BOX = 'Wheel Checklist'
-
-
+FIRST_BUTTON = 'Check Wheel'
+SECOND_BTN_TEXT = ['Check Wheel Colors','Restore Materials']
+THIRD_BTN_TEXT = ['Check UV2','Restore UV']
 THIRD_GROUP_BOX = 'UV Checker'
 
-
-
 """Utilities Variables"""
-NAME_PATTERN = ''
-
+NAME_PATTERN = r'^([a-zA-Z0-9]+)_LOD([a-zA-Z0-9]+)(?:_([a-zA-Z0-9]+))?$'
 LOD_LIST = ['S0','S','0','1','2','3','4','5']
-
 LOD_MORPH = ['S0','S','0','1']
-
 NAME_CHECK_MSG = "All objects has correct naming"
 BLUR_ID_CHECK_MSG = "Blur rims and blur lips have correct material ID"
 PIVOT_CHECK_MSG = "All objects have pivot at origin (0,0,0)"
@@ -32,7 +28,6 @@ ISOLATION_CHECK_MSG = "There is no isolated object"
 LAYER_CHECK_MSG = "Layer hierarchy is correct"
 MORPH_CHECK_MSG = "All objects has correct morph modifier"
 SUB_SELECTION_MSG = "All objects are in correct sub selection"
-
 CHECK_LIST = {
     SPINDLE_CHECK_MSG: True,
     NAME_CHECK_MSG: True,
