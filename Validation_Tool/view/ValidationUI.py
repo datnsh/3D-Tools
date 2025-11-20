@@ -1,4 +1,4 @@
-import re, qtmax, importlib, sys,os
+import qtmax, importlib, sys,os
 filePath = os.path.dirname(__file__)
 folderPath = os.path.dirname(filePath)
 sys.path.append(folderPath)
@@ -6,73 +6,62 @@ from PySide2 import QtCore, QtWidgets, QtGui
 from model import ValidationVariables
 importlib.reload(ValidationVariables)
 
-class ValidationUI(QtWidgets.QDockWidget):
-    def __init__(self, parent = None):
-        super().__init__(parent)
-        ValidationUI.instance = self
-        """
-        TODO: refactor to either Utils or controller.
-        self.all_objects = rt.objects # Utilities or Controller.
-        
 
-        self.lod_morph_list = []
-        self.object_dict = {}
-        """
-        lod_list = ValidationVariables.COMBO_BOX_LIST
-        self.setWindowFlags(QtCore.Qt.Tool)
-        self.setWindowTitle(ValidationVariables.TOOL_TITLE)
+class ValidationUI(QtWidgets.QDockWidget):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.redColor = QtGui.QColor('red')
+        self.originalColor= QtGui.QColor('#646464')
+        container = QtWidgets.QWidget()
+        self.setupUi(container)
+
+    def setupUi(self, container):
+        self.tabWidget = QtWidgets.QTabWidget()
+        firstTab = QtWidgets.QWidget()
+        secondTab = QtWidgets.QWidget()
         
-        self.init_ui()
-        self.addItems(lod_list,self.combo_box)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.wheel_colors_active = False
-        self.uv2_checker_active = False
-    def init_ui(self):
-        self.tab_widget = QtWidgets.QTabWidget()
-        first_tab = QtWidgets.QWidget()
-        second_tab = QtWidgets.QWidget()
-        first_tab_layout = QtWidgets.QVBoxLayout(first_tab)
-        self.tab_widget.addTab(first_tab, ValidationVariables.FIRST_TAB)
-        self.tab_widget.addTab(second_tab, ValidationVariables.SECOND_TAB)
+        self.tabWidget.addTab(firstTab, ValidationVariables.FIRST_TAB)
+        self.tabWidget.addTab(secondTab, ValidationVariables.SECOND_TAB)
 
         #Wheel Tab's Layout
-        first_group_box = QtWidgets.QGroupBox(ValidationVariables.FIRST_GROUP_BOX)
-        second_group_box = QtWidgets.QGroupBox(ValidationVariables.SECOND_GROUP_BOX)
-        third_group_box = QtWidgets.QGroupBox(ValidationVariables.THIRD_GROUP_BOX)
+        firstTabLayout = QtWidgets.QVBoxLayout(firstTab)
+        
+        #----- First Group ------#
+        firstGroupBox = QtWidgets.QGroupBox(ValidationVariables.FIRST_GROUP_BOX)
+        firstGroupLayout = QtWidgets.QHBoxLayout()
+        self.comboBox = QtWidgets.QComboBox()
+        self.firstCheckBox = QtWidgets.QCheckBox(ValidationVariables.FIRST_CHECK_BOX)
+        self.secondCheckBox = QtWidgets.QCheckBox(ValidationVariables.SECOND_CHECK_BOX)
+        self.thirdCheckBox = QtWidgets.QCheckBox(ValidationVariables.THIRD_CHECK_BOX)
+        self.fourthCheckBox = QtWidgets.QCheckBox(ValidationVariables.FOURTH_CHECK_BOX)
+        firstGroupLayout.addWidget(self.firstCheckBox)
+        firstGroupLayout.addWidget(self.secondCheckBox)
+        firstGroupLayout.addWidget(self.thirdCheckBox)
+        firstGroupLayout.addWidget(self.fourthCheckBox)
+        firstGroupLayout.addWidget(self.comboBox)
+        firstGroupBox.setLayout(firstGroupLayout)
+        #------ --------------#
 
-        # LOD Group Component
-        lod_layout = QtWidgets.QHBoxLayout()
-        self.combo_box = QtWidgets.QComboBox()
-        #self.combo_box.currentTextChanged.connect(self.on_lod_group_changed)
-        self.first_check_box = QtWidgets.QCheckBox(ValidationVariables.FIRST_CHECK_BOX)
-        self.second_check_box = QtWidgets.QCheckBox(ValidationVariables.SECOND_CHECK_BOX)
-        self.third_check_box = QtWidgets.QCheckBox(ValidationVariables.THIRD_CHECK_BOX)
-        self.fourth_check_box = QtWidgets.QCheckBox(ValidationVariables.FOURTH_CHECK_BOX)
-        lod_layout.addWidget(self.first_check_box)
-        lod_layout.addWidget(self.second_check_box)
-        lod_layout.addWidget(self.third_check_box)
-        lod_layout.addWidget(self.fourth_check_box)
-        lod_layout.addWidget(self.combo_box)
-        first_group_box.setLayout(lod_layout)
+        #----- Second Group ------#
+        secondGroupBox = QtWidgets.QGroupBox(ValidationVariables.SECOND_GROUP_BOX)
+        secondLayout = QtWidgets.QVBoxLayout()
+        self.listBox = QtWidgets.QListWidget()
+        self.listBox.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.firstBtn = QtWidgets.QPushButton(ValidationVariables.FIRST_BUTTON)
+        self.secondBtn = QtWidgets.QPushButton(ValidationVariables.SECOND_BUTTON)
+        self.thirdBtn = QtWidgets.QPushButton(ValidationVariables.THIRD_BUTTON)
         
-        # Wheel CheckList Components
-        second_layout = QtWidgets.QVBoxLayout()
-        self.list_box = QtWidgets.QListWidget()
-        #self.list_box.itemClicked.connect(self.on_item_selected)
-        self.list_box.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        check_btn = QtWidgets.QPushButton("Check Wheel")
-        self.assign_material_btn = QtWidgets.QPushButton("Check wheel colors")
-        #self.assign_material_btn.clicked.connect(self.on_assign_material_btn_clicked)
-        self.assign_uv2checker_btn = QtWidgets.QPushButton("Check UV2")
-        #self.assign_uv2checker_btn.clicked.connect(self.on_uv2checker_btn_clicked)
+        secondLayout.addWidget(self.listBox)
+        secondLayout.addWidget(self.firstBtn)
+        secondLayout.addWidget(self.secondBtn)
+        secondLayout.addWidget(self.thirdBtn)
+        secondGroupBox.setLayout(secondLayout)
         
-        #check_btn.clicked.connect(self.on_check_btn_clicked)
-        second_layout.addWidget(self.list_box)
-        second_layout.addWidget(check_btn)
-        second_layout.addWidget(self.assign_material_btn)
-        second_layout.addWidget(self.assign_uv2checker_btn)
-        second_group_box.setLayout(second_layout)
-        
+
+        thirdGroupBox = QtWidgets.QGroupBox(ValidationVariables.THIRD_GROUP_BOX)
+
+        #TODO:Refactor and add functions for this layout
         #UV Checker
         uv_layout = QtWidgets.QHBoxLayout()
         uv_vertical_layout = QtWidgets.QVBoxLayout()
@@ -96,44 +85,72 @@ class ValidationUI(QtWidgets.QDockWidget):
         uv_vertical_layout.addLayout(uv_layout)
         #uv_vertical_layout.addLayout(radio_horizontal_layout)
         uv_vertical_layout.addWidget(self.check_uv_btn)
-        third_group_box.setLayout(uv_vertical_layout)
+        thirdGroupBox.setLayout(uv_vertical_layout)
         # TestButton for Testing new function
         test_btn = QtWidgets.QPushButton("Test Function Button")
         #test_btn.clicked.connect(self.check_asset_path)
         
         #Wheel Tab's Component
-        first_tab_layout.addWidget(first_group_box)
-        first_tab_layout.addWidget(second_group_box)
-        first_tab_layout.addWidget(third_group_box)
-        first_tab_layout.addWidget(test_btn)
+        firstTabLayout.addWidget(firstGroupBox)
+        firstTabLayout.addWidget(secondGroupBox)
+        firstTabLayout.addWidget(thirdGroupBox)
+        #firstTabLayout.addWidget(test_btn)
         
         main_layout = QtWidgets.QVBoxLayout()
-        main_layout.addWidget(self.tab_widget)
+        main_layout.addWidget(self.tabWidget)
         
-        widget = QtWidgets.QWidget()
-        widget.setLayout(main_layout)
-        self.setWidget(widget)
-        self.resize(300,650)
+        container.setLayout(main_layout)
+        
+        self.setWidget(container)
+        self.resize(300,450)
+        self.retranslateUi(self)
 
-    def wheel_color_btn_active(self):
-        self.wheel_colors_active = False
-    def uv2_checker_active(self):
-        self.uv2_checker_active = False
-    def addItems(self, itemList, combo_box):
+    def addToComboBox(self, itemList, comboBox):
         for item in itemList:
-            display = f"LOD{item}"
-            combo_box.addItem(display)
-        combo_box.setCurrentIndex(0)
-    
-def main():
-    main_window = qtmax.GetQMaxMainWindow()
-    for widget in main_window.findChildren(QtWidgets.QDockWidget):
-        if widget.objectName() == "ValidationTool":
-            widget.close()
-    w = ValidationUI(parent=main_window)
-    w.setObjectName("ValidationTool")
-    w.setFloating(True)
-    w.show()
+            display = f"{item}"
+            comboBox.addItem(display)
+        comboBox.setCurrentIndex(0)
 
-if __name__ == "__main__":
-    main()
+    def closeLastInstance(self, mainWindow, widgetName):
+        for widget in mainWindow.findChildren(QtWidgets.QDockWidget):
+            if widget.objectName() == widgetName:
+                widget.close()
+
+    def retranslateUi(self, Widget):
+        Widget.setWindowTitle(QtCore.QCoreApplication.translate("Widget",ValidationVariables.TOOL_TITLE, None))
+        #self.swapButton.setText(QtCore.QCoreApplication.translate("Widget", u"Swap", None))
+        #self.copyButton.setText(QtCore.QCoreApplication.translate("Widget", u"Copy Pivots", None))
+        #self.getTargetButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Target", None))
+        #self.getSourceButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Source", None))
+        self.addToComboBox(ValidationVariables.LOD_LIST, self.comboBox)
+
+    def switchButton(self, selectedBtn:QtWidgets.QPushButton, btnColor:QtGui.QColor, btnText:str):
+        selectedBtn.setText(btnText)
+        palette = selectedBtn.palette()
+        palette.setColor(QtGui.QPalette.Button, btnColor)
+        selectedBtn.setPalette(palette)
+        selectedBtn.setAutoFillBackground(True)
+
+    def addToChecklist(self,obj, message):
+        item = QtWidgets.QListWidgetItem()
+        widget = QtWidgets.QWidget()
+        item_layout = QtWidgets.QHBoxLayout(widget)
+        item_layout.setContentsMargins(5, 0, 5, 0)
+        item_label = QtWidgets.QLabel(message)
+        btn = QtWidgets.QPushButton("Fix")
+        btn.setFixedSize(50,20)
+        item_layout.addWidget(item_label)
+        item_layout.addWidget(btn)
+        item.setData(QtCore.Qt.UserRole, obj)
+        self.listBox.addItem(item)
+        self.listBox.setItemWidget(item,widget)
+        """
+        if(obj is not None):
+            item_text = f"{obj.name} {message}"
+        else:
+            item_text = f"{message}"
+        list_item = QtWidgets.QListWidgetItem(item_text)
+        list_item.setData(QtCore.Qt.UserRole, obj)
+        self.set_item_color(list_item, color)
+        self.list_box.addItem(list_item)
+        """

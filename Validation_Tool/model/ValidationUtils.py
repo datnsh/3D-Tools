@@ -1,7 +1,16 @@
 from pymxs import runtime as rt
+from model import ValidationVariables
+import importlib
+importlib.reload(ValidationVariables)
 import re
 
 class ValidationUtils():
+    def __init__(self):
+        ValidationUtils.instance = self
+        self.allObjects = rt.objects
+        self.namePattern = re.compile(ValidationVariables.NAME_PATTERN)
+    def reloadObjects(self):
+        self.allObjects = rt.objects
     def check_sub_selection(obj):
         selection = rt.getSelectionLevel(obj)
         if(str(selection) != 'object'):
@@ -48,8 +57,8 @@ class ValidationUtils():
                 rt.deleteModifier(obj, 1)
             for mod in original_mod:
                 rt.addModifier(obj, rt.copy(mod))
-    def check_morph(obj):
-        match = re.match(DNC.PATTERN, obj.name)
+    def check_morph(self, obj):
+        match = re.match(self.namePattern, obj.name)
         if match:
             lod_part = match.group(2)
             string_lod = str(lod_part)
