@@ -1,7 +1,46 @@
+from model.ValidationUtils import ValidationUtils
+from model import ValidationVariables
+from view.ValidationUI import ValidationUI
+import importlib, sys
+from pymxs import runtime as rt
+
+
+mods = ["view.ValidationUI","model.ValidationUtils","model.ValidationVariables"]
+for mod in mods:
+    importlib.reload(sys.modules[mod])
+
 class ValidationController():
-    def __init__(self):
-        pass
-def on_uv2checker_btn_clicked(self):
+    def __init__(self, ui: ValidationUI, util:ValidationUtils):
+        ValidationController.instance = self
+        self.ui = ui
+        self.util = util
+        self.ui.firstBtn.clicked.connect(self.onFirstBtnClicked)
+        self.ui.secondBtn.clicked.connect(self.onSecondBtnClicked)
+        self.__secondBtnActive = False
+        self.ui.thirdBtn.clicked.connect(self.onThirdBtnClicked)
+        self.__thirdBtnActive = False
+    def onFirstBtnClicked(self):
+        self.ui.addToChecklist(rt.selection[0],'test')
+        #self.ui.switchButton(self.ui.firstBtn, self.ui.original_palette, 'Check Wheel')
+    def onSecondBtnClicked(self):
+        if(self.__secondBtnActive):
+            self.__secondBtnActive = False
+            self.ui.switchButton(self.ui.secondBtn, self.ui.originalColor, ValidationVariables.SECOND_BTN_TEXT[0])
+        else:
+            self.__secondBtnActive = True
+            self.ui.switchButton(self.ui.secondBtn, self.ui.redColor, ValidationVariables.SECOND_BTN_TEXT[1])
+
+    def onThirdBtnClicked(self):
+        if(self.__thirdBtnActive):
+            self.__thirdBtnActive = False
+            self.ui.switchButton(self.ui.thirdBtn, self.ui.originalColor, ValidationVariables.THIRD_BTN_TEXT[0])
+        else:
+            self.__thirdBtnActive = True
+            self.ui.switchButton(self.ui.thirdBtn, self.ui.redColor, ValidationVariables.THIRD_BTN_TEXT[1])
+    
+
+    """
+    def on_uv2checker_btn_clicked(self):
         if(not self.uv2_checker_active):
             self.assign_uv2checker_btn.setText("Restore Material")
             palette = self.assign_uv2checker_btn.palette()
@@ -95,15 +134,7 @@ def on_uv2checker_btn_clicked(self):
                 selected_objects.append(obj)
         rt.select(selected_objects)
         rt.redrawViews()
-    def add_to_checklist(self,obj, message, color):
-        if(obj is not None):
-            item_text = f"{obj.name} {message}"
-        else:
-            item_text = f"{message}"
-        list_item = QtWidgets.QListWidgetItem(item_text)
-        list_item.setData(QtCore.Qt.UserRole, obj)
-        self.set_item_color(list_item, color)
-        self.list_box.addItem(list_item)
+    
     def set_item_color(self, item, color):
         if color == ItemColor.RED:
             item.setForeground(QtGui.QColor('red'))
@@ -180,4 +211,4 @@ def on_uv2checker_btn_clicked(self):
         if(not DWV.check_morph(obj)):
             self.add_to_checklist(obj," doesn't have a morph modifier", ItemColor.RED)
             self.check_list[MORPH_CHECK_MSG] = False
-    
+    """
