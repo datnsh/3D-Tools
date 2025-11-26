@@ -1,14 +1,13 @@
-import qtmax, importlib
-from controller import ValidationController
-from model import ValidationVariables
-from view import ValidationUI
+import qtmax, importlib, sys, os
+sys.path.append(os.path.dirname(__file__))
 from pymxs import runtime as rt
-mods = [ValidationController, ValidationVariables, ValidationUI]
-for mod in mods:
-    importlib.reload(mod)
+from model import ValidationVariables
 from controller.ValidationController import ValidationController
 from model.ValidationUtils import ValidationUtils
 from view.ValidationUI import ValidationUI
+mods = [controller.ValidationController, model.ValidationUtils, view.ValidationUI, ValidationUtils]
+for mod in mods:
+    importlib.reload(mod)
 
 def main():
     mainWindow = qtmax.GetQMaxMainWindow()

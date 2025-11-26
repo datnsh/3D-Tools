@@ -1,8 +1,10 @@
 from pymxs import runtime as rt
+import pymxs
 class PivotOperation():
     def __init__(self):
         self.source_list = []
         self.target_list = []
+        self.store_source_pos = {}
     def get_selected_object(self):
         return rt.selection
     def get_source_objects(self):
@@ -25,23 +27,39 @@ class PivotOperation():
         geo = [obj for obj in rt.geometry if rt.classof(obj) == rt.Editable_Poly]
         return geo
     def transfer_pivot(self):
-        n = len(self.source_list)
-        for i in range(n):
+        with pymxs.undo(True):
             try:
-                print(f"Copy {self.source_list[i].name} pivot to {self.target_list[i].name}")
-                PivotOperation.copy_pivot(self.source_list[i],self.target_list[i])
-                print("completed")
+                target_map = {self.get_object_name(obj) : obj for obj in self.target_list} #Key = name of obj, value = obj in the target list
+                for source_obj in self.source_list:
+                        source_name = self.get_object_name(source_obj)
+                        if(source_name in target_map):
+                            target_obj = target_map[source_name]
+                            self.copy_pivot(source_obj, target_obj)
+                rt.redrawViews()
             except Exception as e:
-                print(str(e))
-    def copy_pivot(source, target):
-        source_position = source.pivot
-        source_rotation = source.rotation
-        target.rotation = source_rotation
-
-        target.objectoffsetrot *= source_rotation
-        target.pivot = source_position
-    
-
-if __name__ == "__main__":
-    po = PivotOperation()
-    po.transfer_pivot()
+                    print(str(e))
+    def copy_pivot(self, src, tgt):
+        rt.src = src
+        rt.tgt = tgt
+        rt.execute("""
+        rot = tgt.rotation - src.rotation
+        brot = inverse(rot as quat)
+        tgt.pivot = src.pivot
+        in coordsys local tgt.rotation *= brot
+        tgt.objectoffsetrot *= brot
+        tgt.objectoffsetpos *= brot
+        """)
+        rt.redrawViews()
+        
+    def get_object_name(self, object):
+        res = object.name.split('_')
+        return res[1]
+    def rotate_pivot(self, src, tgt):
+        rot = tgt.rotation - src.rotation
+        brot = rt.Inverse(rot)
+        print(brot)
+        tgt.pivot = src.pivot
+        with rt.SetRefCoordSys('local'):
+            tgt.rotation *=brot
+            tgt.objectoffsetrot *= brot
+            tgt.objectoffsetpos *=brot

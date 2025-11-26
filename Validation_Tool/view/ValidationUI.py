@@ -8,7 +8,6 @@ importlib.reload(ValidationVariables)
 
 
 class ValidationUI(QtWidgets.QDockWidget):
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.redColor = QtGui.QColor('red')
@@ -48,9 +47,9 @@ class ValidationUI(QtWidgets.QDockWidget):
         secondLayout = QtWidgets.QVBoxLayout()
         self.listBox = QtWidgets.QListWidget()
         self.listBox.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.firstBtn = QtWidgets.QPushButton(ValidationVariables.FIRST_BUTTON)
-        self.secondBtn = QtWidgets.QPushButton(ValidationVariables.SECOND_BUTTON)
-        self.thirdBtn = QtWidgets.QPushButton(ValidationVariables.THIRD_BUTTON)
+        self.firstBtn = QtWidgets.QPushButton(ValidationVariables.FIRST_BTN_TEXT)
+        self.secondBtn = QtWidgets.QPushButton()
+        self.thirdBtn = QtWidgets.QPushButton()
         
         secondLayout.addWidget(self.listBox)
         secondLayout.addWidget(self.firstBtn)
@@ -118,11 +117,9 @@ class ValidationUI(QtWidgets.QDockWidget):
 
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QtCore.QCoreApplication.translate("Widget",ValidationVariables.TOOL_TITLE, None))
-        #self.swapButton.setText(QtCore.QCoreApplication.translate("Widget", u"Swap", None))
-        #self.copyButton.setText(QtCore.QCoreApplication.translate("Widget", u"Copy Pivots", None))
-        #self.getTargetButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Target", None))
-        #self.getSourceButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Source", None))
         self.addToComboBox(ValidationVariables.LOD_LIST, self.comboBox)
+        self.secondBtn.setText(QtCore.QCoreApplication.translate("Widget",ValidationVariables.SECOND_BTN_TEXT, None))
+        self.thirdBtn.setText(QtCore.QCoreApplication.translate("Widget",ValidationVariables.THIRD_BTN_TEXT, None))
 
     def switchButton(self, selectedBtn:QtWidgets.QPushButton, btnColor:QtGui.QColor, btnText:str):
         selectedBtn.setText(btnText)

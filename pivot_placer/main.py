@@ -57,12 +57,14 @@ class PivotPlacer(QtWidgets.QDockWidget):
             item = QtWidgets.QListWidgetItem(obj.name)
             item.setData(QtCore.Qt.UserRole, obj)
             listTable.addItem(item)
-
     
-if __name__ == "__main__":
+def main():
     main_window = qtmax.GetQMaxMainWindow()
     PivotPlacer.closeChildren(main_window,WINDOWNAME)
     w = PivotPlacer(parent=main_window)
     w.setObjectName(WINDOWNAME)
     w.setFloating(True)
     w.show()
+
+if __name__ == "__main__":
+    main()
