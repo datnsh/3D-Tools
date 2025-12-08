@@ -10,6 +10,7 @@ for mod in mods:
     importlib.reload(mod)
 from view.poly_checker_ui import PolyCheckerUI
 from model.poly_checker_utils import PolyUtil
+import model.poly_checker_variables as pv
 
 
 class PolyController():
@@ -23,11 +24,27 @@ class PolyController():
         self.ui.show()
         self.util = PolyUtil()
         self.ui.checkBtn.clicked.connect(self.onCheckBtnClicked)
+
     def formatKey(self,keyValue = int()):
-        return poly_checker_variables.INVERSELOD[keyValue]
+        return self.util.LOD[keyValue]     
+    def getItemColor(self, status):
+        if(pv.STATUS[0] in status):
+            return pv.ITEMCOLOR[0]
+        elif(pv.STATUS[1] in status):
+            return pv.ITEMCOLOR[1]
+        else:
+            return pv.ITEMCOLOR[2]
     def onCheckBtnClicked(self):
         self.ui.checkTable.setRowCount(0)
         self.util.resetPolyCount()
-        self.util.checkPolycount()
-        for key, value in self.util.polyDict.items():
-            self.ui.addTableItem(self.formatKey(key), str(value), 'OK')
+        self.util.getPolycount()
+        checkedBtnId = self.ui.radioGroup.checkedId()
+        self.util.polycountTypeDict = self.util.getPolycountTypeDict(checkedBtnId)
+        for k, v in self.util.polyDict.items():
+            itemStatus = self.util.checkPolycount(k,v)
+            self.ui.addTableItem(k, str(v), itemStatus)
+            row = self.ui.checkTable.rowCount() - 1
+
+            statusItem = self.ui.checkTable.item(row, 2)
+            color = self.getItemColor(itemStatus)
+            self.ui.setItemColor(statusItem ,color)
