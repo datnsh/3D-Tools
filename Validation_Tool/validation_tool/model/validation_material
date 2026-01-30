@@ -1,0 +1,80 @@
+from pymxs import runtime as rt
+
+UV2Checker = "UV2Checker"
+WheelColor = "WheelColor"
+original_material = {}
+def create_uv2_material():
+    uv2_mat = rt.StandardMaterial()
+    checker_map = rt.Checker()
+    checker_map.name = "CheckerMap"
+    checker_map.color1 = (0,0,0)
+    checker_map.color2 = (255,255,255)
+    checker_map.coordinates.U_Tiling = 15
+    checker_map.coordinates.V_Tiling = 15
+    checker_map.coordinates.mapChannel = 2
+    uv2_mat.diffuseMap = checker_map
+    return uv2_mat
+def create_standard_material():
+    colors = [
+        rt.color(255, 0, 0),        # ID 1
+        rt.color(255, 255, 0),      # ID 2
+        rt.color(186, 186, 186),    # ID 3
+        rt.color(0, 255, 0),        # ID 4
+        rt.color(0, 0, 255),        # ID 5
+        rt.color(220, 0, 254),      # ID 6
+        rt.color(202, 156, 111),    # ID 7
+        rt.color(0, 0, 0),          # ID 8
+        rt.color(255, 186, 0),      # ID 9
+        rt.color(134, 50, 0),       # ID 10
+        rt.color(186, 222, 255),    # ID 11
+        rt.color(186, 222, 255),    # ID 12
+        rt.color(255, 153, 240),    # ID 13
+        rt.color(186, 186, 186),    # ID 14
+        rt.color(186, 186, 186),    # ID 15
+        rt.color(186, 186, 186),    # ID 16
+        rt.color(255, 255, 255),    # ID 17
+        rt.color(255, 255, 255),    # ID 18
+        rt.color(255, 255, 255),    # ID 19
+        rt.color(255, 255, 255),    # ID 20
+        rt.color(255, 167, 167),    # ID 21
+        rt.color(255, 167, 167),    # ID 22
+        rt.color(255, 255, 181),    # ID 23
+        rt.color(255, 255, 181),    # ID 24
+        rt.color(232, 175, 255),    # ID 25
+        rt.color(232, 175, 255),    # ID 26
+        rt.color(245, 239, 234)     # ID 27
+    ]
+    multi_mat = rt.MultiMaterial()
+    multi_mat.numsubs = len(colors)
+    multi_mat.name = "27_ID_MultiMat"
+    for i in range(len(colors)):
+        mat = rt.StandardMaterial()
+        mat.name = f"Mat_ID_{i+1}"
+        mat.diffuse = colors[i]
+        multi_mat[i] = mat
+    return multi_mat
+material_map = {
+    UV2Checker: create_uv2_material(),
+    WheelColor: create_standard_material()
+}
+
+def apply_material_to_polygons(material):
+    all_object = rt.objects
+    material_box = material_map[material]
+    for obj in all_object:
+        if obj.name == "spindle":
+            continue
+        print(f"Applying new material for {obj.name}")
+        if obj.name not in original_material:
+            original_material[obj.name] = obj.material
+        obj.material = material_box
+    rt.redrawViews()
+
+def restore_original_materials():
+    all_object = rt.objects
+    for obj in all_object:
+        if obj.name in original_material:
+            print(f"restoring original material for: {obj.name}")
+            obj.material = original_material[obj.name]
+        else:
+            print(f"No original material stored for {obj.name}")
