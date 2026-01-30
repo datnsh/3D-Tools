@@ -1,23 +1,23 @@
 import qtmax, importlib, sys, os
-sys.path.append(os.path.dirname(__file__))
 from pymxs import runtime as rt
-from model import ValidationVariables
-from controller.ValidationController import ValidationController
-from model.ValidationUtils import ValidationUtils
-from view.ValidationUI import ValidationUI
-mods = [controller.ValidationController, model.ValidationUtils, view.ValidationUI, ValidationUtils]
+path = os.path.dirname(__file__)
+if path not in sys.path:
+    sys.path.append(path)
+from validation_tool.model import validation_utils as utils
+from validation_tool.model import validation_variables as var
+from validation_tool.view import validation_ui as ui
+from validation_tool.controller import validation_controller as control
+mods = [utils, var, ui, control]
 for mod in mods:
     importlib.reload(mod)
-
 def main():
     mainWindow = qtmax.GetQMaxMainWindow()
-    ui = ValidationUI(parent=mainWindow)
-    util = ValidationUtils()
-    controller = ValidationController(ui,util)
-    ui.setObjectName(ValidationVariables.TOOL_TITLE)
-    ui.closeLastInstance(mainWindow, ValidationVariables.TOOL_TITLE)
-    ui.setFloating(True)
-    ui.show()
-
+    main_ui = ui.ValidationUI(parent=mainWindow)
+    util = utils.ValidationUtils()
+    controller = control.ValidationController(main_ui,util)
+    main_ui.setObjectName(var.TOOL_TITLE)
+    main_ui.close_last_instance(mainWindow, var.TOOL_TITLE)
+    main_ui.setFloating(True)
+    main_ui.show()
 if __name__ == "__main__":
     main()
