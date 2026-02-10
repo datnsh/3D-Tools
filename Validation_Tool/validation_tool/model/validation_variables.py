@@ -32,17 +32,18 @@ ISOLATION = 'isolation'
 PIVOT = 'pivot'
 BLUR_ID = 'blurid'
 MORPH = 'morph'
+ISO_VERT = 'isolated vertices'
 
 NAME_MSG = ["All objects has correct naming", " has wrong naming"]
 BLUR_ID_MSG = ["Blur rims and blur lips have correct material ID"," has wrong ID"]
 PIVOT_MSG = ["All objects have pivot at origin (0,0,0)"," pivot not at origin (0,0,0)"]
 HELPER_MSG = ["Helper filter is correct","Helper is checked"]
-SPINDLE_ROTATION_MSG = ["Spindle rotation is correct","Spindle has rotation"]
+SPINDLE_ROTATION_MSG = ["Spindle rotation is correct"," has rotation"]
 ISOLATION_MSG = ["There is no isolated object", "There is isolated objects"]
 LAYER_MSG = ["Layer hierarchy is correct", "There is extra layer"]
 MORPH_MSG = ["All objects has correct morph modifier"," is missing morph modifier"]
 SUB_SELECTION_MSG = ["All objects are in correct sub selection"," has sub selection"]
-
+ISO_VERT_MSG = ["All objects have no isolated vertex", " has isolated vertices"]
 ERROR_MSG = {
     NAME : NAME_MSG,
     SPINDLE: SPINDLE_ROTATION_MSG,
@@ -52,6 +53,7 @@ ERROR_MSG = {
     BLUR_ID: BLUR_ID_MSG,
     PIVOT : PIVOT_MSG,
     ISOLATION : ISOLATION_MSG,
-    MORPH : MORPH_MSG
+    MORPH : MORPH_MSG,
+    ISO_VERT:ISO_VERT_MSG,
 }
 """"""

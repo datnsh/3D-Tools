@@ -86,17 +86,25 @@ class ValidationController():
     
     def on_combo_box_changed(self):
         current_lod = self.ui.combo_box.currentText()
-        name_path = f"$*LOD{current_lod}*"
-        self.util.hide_objects(name_path="$*")
-        self.util.unhide_objects(name_path=name_path)
-        if(self.ui.first_check_box.isChecked()):
-            self.util.hide_objects(name_path="$*spindle")
-        if(self.ui.second_check_box.isChecked()):
-            self.util.hide_objects(name_path="$*morph*")
-        if(self.ui.third_check_box.isChecked()):
-            self.util.hide_objects(name_path="$*blur*")
-        if(self.ui.fourth_check_box.isChecked()):
-            self.util.hide_objects(name_path="$*wheel*")
+        name_path = f"{current_lod}"
+        morph = f"morph"
+        spindle = f"spindle"
+        blur = f"blur"
+        wheel = f"wheel"
+        for obj in self.util.get_all_objects():
+            if(name_path not in obj.name):
+                obj.isHidden = True
+            else:
+                obj.isHidden = False
+            if(morph in obj.name and self.ui.second_check_box.isChecked()):
+                obj.isHidden = True
+            if(spindle in obj.name and not self.ui.first_check_box.isChecked()):
+                obj.isHidden = False
+            if(blur in obj.name and self.ui.third_check_box.isChecked()):
+                print(obj.name)
+                obj.isHidden = True
+            if(wheel in obj.name and self.ui.fourth_check_box.isChecked()):
+                obj.isHidden = True
         rt.redrawViews()
         
     def check_helpers(self):
@@ -182,6 +190,15 @@ class ValidationController():
             fix_func=None,
             data=obj
         )
+    def check_isolated_vertices(self,obj):
+        self._run_check(
+            type=var.ISO_VERT,
+            check_func=self.util.check_isolated_vertices,
+            check_args=(obj,),
+            can_fix=False,
+            fix_func=None,
+            data=obj
+        )
 
     def validate_scene(self):
         all_objects = self.util.get_all_objects()
@@ -199,6 +216,7 @@ class ValidationController():
                 self.check_morph(obj)
                 self.check_pivot(obj)
                 self.check_layer()
+                self.check_isolated_vertices(obj)
         self.print_result()
 
     def print_result(self):
@@ -218,9 +236,11 @@ class ValidationController():
         res = check_func(*args, **kwargs)
         message = ""
         if(not res):
+            print("Add")
             if(data):
                 message += data.name
             message += var.ERROR_MSG[type][1]
+            print(f"{type} and {message}")
             error = ve.ValidationError(
                 message=message,
                 can_fix=can_fix,
