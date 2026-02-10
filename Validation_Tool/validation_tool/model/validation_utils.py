@@ -17,6 +17,7 @@ class ValidationUtils():
             var.UV2CHECKER: self.create_uv2_material(),
             var.WHEELCOLOR: self.create_standard_material()
         }
+        self.isolated_vertex = {}
     def check_name(self,obj):
         obj_name = obj.name
         match = re.match(self.name_pattern, obj_name)
@@ -132,25 +133,21 @@ class ValidationUtils():
     def check_asset_path():
         pass
 
-    def check_IsolatedVertices(self):
-        result = []
-        for obj in rt.geometry:
-            isoVerts = rt.IsolatedVertices.Check(rt.currentTime,obj,pymxs.byref(result))
-            if len(isoVerts[1]) != 0:
-                return(True, None)
-        return False
+    def check_isolated_vertices(self,obj):
+        check_res = []
+        isoVerts = rt.IsolatedVertices.Check(rt.currentTime,obj,pymxs.byref(check_res))
+        if len(isoVerts[1]) != 0:
+            return False
+        return True
     
-    def hide_objects(self, name_path: str):
-        objects = rt.safeExecute(name_path)
-        for o in objects:
+    def get_objects(self, name_path:str):
+        return rt.safeExecute(name_path)
+    def hide_objects(self, name_path:str):
+        for o in rt.safeExecute(name_path):
             o.isHidden = True
-        rt.redrawViews()
-    
     def unhide_objects(self, name_path:str):
-        objects = rt.safeExecute(name_path)
-        for o in objects:
+        for o in rt.safeExecute(name_path):
             o.isHidden = False
-        rt.redrawViews()
     
 
     def create_uv2_material(self):
