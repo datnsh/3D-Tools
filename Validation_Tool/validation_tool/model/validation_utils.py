@@ -18,6 +18,13 @@ class ValidationUtils():
             var.WHEELCOLOR: self.create_standard_material()
         }
         self.isolated_vertex = {}
+
+    def redraw_view(func):
+        def wrapper(*args,**kwargs):
+            func(*args,**kwargs)
+            rt.redrawViews()
+        return wrapper
+    
     def check_name(self,obj):
         obj_name = obj.name
         match = re.match(self.name_pattern, obj_name)
@@ -161,6 +168,7 @@ class ValidationUtils():
         checker_map.coordinates.mapChannel = 2
         uv2_mat.diffuseMap = checker_map
         return uv2_mat
+    
     def create_standard_material(self):
         colors = [
             rt.color(255, 0, 0),        # ID 1
@@ -201,6 +209,7 @@ class ValidationUtils():
             multi_mat[i] = mat
         return multi_mat
     
+    @redraw_view
     def apply_material_to_polygons(self,material):
         all_object = rt.objects
         material_box = self.material_map[material]
@@ -213,6 +222,7 @@ class ValidationUtils():
             obj.material = material_box
         rt.redrawViews()
 
+    @redraw_view
     def restore_original_materials(self):
         all_object = rt.objects
         for obj in all_object:
@@ -221,7 +231,7 @@ class ValidationUtils():
                 obj.material = self.original_material[obj.name]
             else:
                 print(f"No original material stored for {obj.name}")
-        rt.redrawViews()
+    
 
 
 
