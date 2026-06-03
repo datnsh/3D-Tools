@@ -6,9 +6,12 @@ __pycache__/
 # C extensions
 *.so
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 199e902 (Fix bug and add gitignore)
+=======
+>>>>>>> 199e9028648d759506ba93e98e1e0e80b3ca6d5e
 #Custom config
 config.*
 
