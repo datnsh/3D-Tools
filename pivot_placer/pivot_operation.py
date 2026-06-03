@@ -4,7 +4,9 @@ class PivotOperation():
     def __init__(self):
         self.source_list = []
         self.target_list = []
-        self.store_source_pos = {}
+    def clear_all_list(self):
+        self.source_list.clear()
+        self.target_list.clear()
     def get_selected_object(self):
         return rt.selection
     def get_source_objects(self):
@@ -37,7 +39,8 @@ class PivotOperation():
                             self.copy_pivot(source_obj, target_obj)
                 rt.redrawViews()
             except Exception as e:
-                    print(str(e))
+                    print("At transfer_pivot: " + str(e))
+    
     def copy_pivot(self, src, tgt):
         rt.src = src
         rt.tgt = tgt
@@ -49,11 +52,12 @@ class PivotOperation():
         tgt.objectoffsetrot *= brot
         tgt.objectoffsetpos *= brot
         """)
-        rt.redrawViews()
         
     def get_object_name(self, object):
         res = object.name.split('_')
-        return res[1]
+        obj_name = res[1] + res[2]
+        return obj_name
+
     def rotate_pivot(self, src, tgt):
         rot = tgt.rotation - src.rotation
         brot = rt.Inverse(rot)
