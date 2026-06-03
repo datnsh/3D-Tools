@@ -5,7 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
+<<<<<<< HEAD
 
+=======
+>>>>>>> 199e902 (Fix bug and add gitignore)
 #Custom config
 config.*
 

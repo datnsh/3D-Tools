@@ -1,9 +1,15 @@
 import sys, importlib, qtmax, os, pymxs
-file_path = os.path.abspath(__file__)
-file_dir = os.path.dirname(file_path)
-print(file_dir)
-sys.path.extend([str(file_dir)])
+file_path = os.path.dirname(__file__)
+try:
+    from config import TOOLS_PATH
+except ImportError:
+    TOOLS_PATH = ""
+paths = [p for p in [file_path, TOOLS_PATH] if p]
+for path in paths:
+    if path not in sys.path:
+        sys.path.append(path)
 from PySide2 import QtWidgets, QtCore
+from tracking_deco import time_saver
 
 import tool_ui, pivot_operation
 imports = [tool_ui, pivot_operation]
@@ -23,12 +29,19 @@ class PivotPlacer(QtWidgets.QDockWidget):
         self.ui.swapButton.clicked.connect(self.onSwapButtonClicked)
         self.ui.getSourceButton.clicked.connect(self.onGetSourceButtonClicked)
         self.ui.getTargetButton.clicked.connect(self.onGetTargetButtonClicked)
+        self.ui.clearButton.clicked.connect(self.onClearButtonClicked)
         
     def closeChildren(main_window, windowName):
         for widget in main_window.findChildren(QtWidgets.QDockWidget):
             if widget.objectName() == windowName:
                 widget.close()
-                
+    
+    def onClearButtonClicked(self):
+        self.op.clear_all_list()
+        self.ui.sourceTable.clear()
+        self.ui.targetTable.clear()
+        
+    @time_saver(seconds_saved=30.0, tool_name="UbiPivotPlacer")
     def onCopyButtonClicked(self):
         self.op.transfer_pivot()
         
