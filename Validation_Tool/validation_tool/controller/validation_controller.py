@@ -205,6 +205,7 @@ class ValidationController():
         rt.clearSelection()
         self.check_helpers()
         self.check_isolation()
+        self.check_layer()
         for obj in all_objects:
             self.check_name(obj)
             if(obj.name == "spindle"):
@@ -215,7 +216,7 @@ class ValidationController():
                 self.check_sub_selection(obj)
                 self.check_morph(obj)
                 self.check_pivot(obj)
-                self.check_layer()
+                
                 self.check_isolated_vertices(obj)
         self.print_result()
 
