@@ -1,8 +1,10 @@
 import sys, os, importlib, qtmax
 path = os.path.dirname(__file__)
-paths = [path,
-    '\\virtuosgames.com\geh\TOOLS\Technical_Deployment\ReleaseLine\GE_ToolSet\plugin\_Default\maya'
-]
+try:
+    from config import TOOLS_PATH
+except ImportError:
+    TOOLS_PATH = ""
+paths = [path, TOOLS_PATH]
 for path in paths:
     if path not in sys.path:
         sys.path.append(path)
