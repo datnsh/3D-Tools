@@ -10,6 +10,7 @@ from validation_tool.controller import validation_controller as control
 mods = [utils, var, ui, control]
 for mod in mods:
     importlib.reload(mod)
+
 def main():
     mainWindow = qtmax.GetQMaxMainWindow()
     main_ui = ui.ValidationUI(parent=mainWindow)
