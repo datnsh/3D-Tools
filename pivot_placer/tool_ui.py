@@ -26,11 +26,20 @@ class Ui_Widget(QtWidgets.QDockWidget):
 
         self.hLayout.addLayout(self.sourceVerticalLayout)
         #------------------------------------------------
+        self.buttonVerticalLayout = QtWidgets.QVBoxLayout()
         self.swapButton = QtWidgets.QPushButton(self.mainWidget)
         self.swapButton.setObjectName(u"swapButton")
+        self.clearButton = QtWidgets.QPushButton(self.mainWidget)
+        self.clearButton.setObjectName(u"clearButton")
+        self.buttonVerticalLayout.setSpacing(4)
+        self.buttonVerticalLayout.addStretch(1)
+        self.buttonVerticalLayout.addWidget(self.swapButton)
+        self.buttonVerticalLayout.addWidget(self.clearButton)
+        self.buttonVerticalLayout.addStretch(1)
+        self.hLayout.addLayout(self.buttonVerticalLayout)
 
         #------------------------------------------------
-        self.hLayout.addWidget(self.swapButton)
+        
         self.targetVerticalLayout = QtWidgets.QVBoxLayout()
         self.targetVerticalLayout.setObjectName(u"targetVerticalLayout")
         self.targetTable = QtWidgets.QListWidget(self.mainWidget)
@@ -46,6 +55,7 @@ class Ui_Widget(QtWidgets.QDockWidget):
         self.copyButton = QtWidgets.QPushButton(self.mainWidget)
         self.copyButton.setObjectName(u"copyButton")
         self.vLayout.addWidget(self.copyButton)
+        
 
         self.retranslateUi(Widget)
 
@@ -55,3 +65,4 @@ class Ui_Widget(QtWidgets.QDockWidget):
         self.copyButton.setText(QtCore.QCoreApplication.translate("Widget", u"Copy Pivots", None))
         self.getTargetButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Target", None))
         self.getSourceButton.setText(QtCore.QCoreApplication.translate("Widget", u"Get Source", None))
+        self.clearButton.setText(QtCore.QCoreApplication.translate("Widget", u"Clear", None))
