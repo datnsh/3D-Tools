@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtGui,QtCore
-from polycount_checker.model import poly_checker_variables as pv
+from ..model import poly_checker_variables as pv
 import importlib
 importlib.reload(pv)
 
@@ -59,16 +59,17 @@ class PolyCheckerUI(QtWidgets.QDockWidget):
             if widget.objectName() == widgetName:
                 widget.close()
 
-    def add_table_item(self, firstCol, secondCol, thirdCol):
+    def add_table_item(self, lod_name, polycount_str, status, diff):
         self.check_table.setSortingEnabled(False)
         row = self.check_table.rowCount()
-        tableFirstCol = QtWidgets.QTableWidgetItem(firstCol)
-        tableSecondCol = QtWidgets.QTableWidgetItem(secondCol)
-        tableThirdCol = QtWidgets.QTableWidgetItem(thirdCol)
+        msg = self.get_status_msg(status, diff)
+        tableFirstCol = QtWidgets.QTableWidgetItem(lod_name)
+        tableSecondCol = QtWidgets.QTableWidgetItem(polycount_str)
+        tableThirdCol = QtWidgets.QTableWidgetItem(msg)
         self.check_table.insertRow(row)
-        tableThirdCol.setData(QtCore.Qt.UserRole, thirdCol)
+        tableThirdCol.setData(QtCore.Qt.UserRole, msg)
 
-        color = self.get_item_color(thirdCol)
+        color = self.get_item_color(status)
         self.set_item_color(tableThirdCol,color)
 
         self.check_table.setItem(row, 0, tableFirstCol)
@@ -81,18 +82,16 @@ class PolyCheckerUI(QtWidgets.QDockWidget):
         if color != pv.LIGHT_GREEN:
             item.setBackgroundColor(self.item_color_dict[3])
 
-    def get_status_msg(self, statusId: int):
-        return self.item_status[statusId]
+    def get_status_msg(self, status: int, diff: int):
+        if status != 0:
+            return f"{str(pv.STATUS[1])} {diff}"
+        else:
+            return self.item_status[status]
     
     def set_status_msg(self, item: QtWidgets.QTableWidgetItem, key: int):
         itemText = self.get_status_msg(key)
         item.setText(itemText)
 
-    def get_item_color(self, status):
-        if(pv.STATUS[0] in status):
-            return pv.ITEM_COLOR[0]
-        elif(pv.STATUS[1] in status):
-            return pv.ITEM_COLOR[1]
-        else:
-            return pv.ITEM_COLOR[2]
+    def get_item_color(self, status : int):
+        return pv.ITEM_COLOR[status]
         

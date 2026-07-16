@@ -232,6 +232,31 @@ class ValidationUtils():
             else:
                 print(f"No original material stored for {obj.name}")
     
+    @redraw_view
+    def livery_grid_check(self):
+        mat = self.create_livery_grid_material()
+        
+
+    def create_livery_grid_material(self):
+        wing = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\wing.tga"
+        back = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\back.tga"
+        top = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\top.tga"
+        left = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\left.tga"
+        right = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\right.tga"
+        front = "D:\P4\FMBase_Main\Forza2\Main\Media\Src\cars\_Assets\Textures\Test\front.tga"
+        bmaps = [wing,back,front,right,left,top]
+        prev_mix = rt.Mix()
+        for m in bmaps:
+            curr_mix = rt.Mix()
+            curr_mix.color1 = m
+            curr_mix.color2 = m
+        mat = rt.StandardMaterial()
+        mat.diffuseMap = curr_mix
+        mat.showInViewport = True
+
+
+
+    
 
 
 

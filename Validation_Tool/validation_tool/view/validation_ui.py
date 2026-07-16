@@ -3,6 +3,7 @@ filePath = os.path.dirname(__file__)
 folderPath = os.path.dirname(filePath)
 sys.path.append(folderPath)
 from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2.QtWidgets import (QMenu)
 from validation_tool.model import validation_variables
 importlib.reload(validation_variables)
 
@@ -24,7 +25,7 @@ class ValidationUI(QtWidgets.QDockWidget):
         self.tab_widget.addTab(second_tab, validation_variables.SECOND_TAB)
 
         #Wheel Tab's Layout
-        firstTabLayout = QtWidgets.QVBoxLayout(first_tab)
+        first_tab_layout = QtWidgets.QVBoxLayout(first_tab)
         
         #----- First Group ------#
         first_group_box = QtWidgets.QGroupBox(validation_variables.FIRST_GROUP_BOX)
@@ -44,18 +45,18 @@ class ValidationUI(QtWidgets.QDockWidget):
 
         #----- Second Group ------#
         second_group_box = QtWidgets.QGroupBox(validation_variables.SECOND_GROUP_BOX)
-        second_layout = QtWidgets.QVBoxLayout()
+        second_group_layout = QtWidgets.QVBoxLayout()
         self.list_box = QtWidgets.QListWidget()
         self.list_box.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.first_btn = QtWidgets.QPushButton(validation_variables.FIRST_BTN_TEXT)
         self.second_btn = QtWidgets.QPushButton()
         self.third_btn = QtWidgets.QPushButton()
         
-        second_layout.addWidget(self.list_box)
-        second_layout.addWidget(self.first_btn)
-        second_layout.addWidget(self.second_btn)
-        second_layout.addWidget(self.third_btn)
-        second_group_box.setLayout(second_layout)
+        second_group_layout.addWidget(self.list_box)
+        second_group_layout.addWidget(self.first_btn)
+        second_group_layout.addWidget(self.second_btn)
+        second_group_layout.addWidget(self.third_btn)
+        second_group_box.setLayout(second_group_layout)
         
 
         third_group_box = QtWidgets.QGroupBox(validation_variables.THIRD_GROUP_BOX)
@@ -90,11 +91,24 @@ class ValidationUI(QtWidgets.QDockWidget):
         #test_btn.clicked.connect(self.check_asset_path)
         
         #Wheel Tab's Component
-        firstTabLayout.addWidget(first_group_box)
-        firstTabLayout.addWidget(second_group_box)
-        firstTabLayout.addWidget(third_group_box)
-        #firstTabLayout.addWidget(test_btn)
+        first_tab_layout.addWidget(first_group_box)
+        first_tab_layout.addWidget(second_group_box)
+        first_tab_layout.addWidget(third_group_box)
+        #first_tab_layout.addWidget(test_btn)
+
+        #Car tab's layout
+        second_tab_layout = QtWidgets.QVBoxLayout(second_tab)
         
+        second_first_group_box = QtWidgets.QGroupBox(validation_variables.SECOND_FIRST_GROUP)
+        second_first_group_layout = QtWidgets.QVBoxLayout()
+        self.check_livery_btn = QtWidgets.QPushButton("Check Livery Grid")
+        second_first_group_layout.addWidget(self.check_livery_btn)
+        second_first_group_box.setLayout(second_first_group_layout)
+
+        #Add Group to Second Tab
+        second_tab_layout.addWidget(second_first_group_box)
+        
+
         main_layout = QtWidgets.QVBoxLayout()
         main_layout.addWidget(self.tab_widget)
         
@@ -118,9 +132,20 @@ class ValidationUI(QtWidgets.QDockWidget):
     def retranslate_ui(self, Widget : QtWidgets.QWidget):
         Widget.setWindowTitle(QtCore.QCoreApplication.translate("Widget",validation_variables.TOOL_TITLE, None))
         self.add_to_combo_box(validation_variables.LOD_LIST, self.combo_box)
+        
         self.second_btn.setText(QtCore.QCoreApplication.translate("Widget",validation_variables.SECOND_BTN_TEXT[0], None))
+        self.second_btn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.second_btn.customContextMenuRequested.connect(lambda pos, widget=self.second_btn: self.show_context_menu(widget, pos))
+        
         self.third_btn.setText(QtCore.QCoreApplication.translate("Widget",validation_variables.THIRD_BTN_TEXT[0], None))
 
+    def show_context_menu(self, widget, pos):
+        menu = QMenu(widget)
+        add_favorite = menu.addAction("Add to favorite")
+        action = menu.exec_(widget.mapToGlobal(pos))
+
+        if action == add_favorite:
+            print(f"{widget.text()} added to favorite")
     def switch_button(self, selected_btn:QtWidgets.QPushButton, btn_color:QtGui.QColor, btnText:str):
         selected_btn.setText(btnText)
         palette = selected_btn.palette()
