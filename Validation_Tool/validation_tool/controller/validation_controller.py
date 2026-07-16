@@ -27,10 +27,11 @@ class ValidationController():
         self.ui.third_check_box.stateChanged.connect(lambda state: self.on_check_box_checked(state, "$blur*"))
         self.ui.fourth_check_box.stateChanged.connect(lambda state: self.on_check_box_checked(state, "$wheel*"))
         self.__third_btn_active = False
+        self.ui.check_livery_btn.clicked.connect(self.on_livery_grid_check_select)
         self.default_keys = var.ERROR_MSG
         self._init_error_dict()
         self._init_check_result()
-
+        
     def on_item_select(self):
         items = self.ui.list_box.selectedItems()
         if not items:
@@ -258,3 +259,6 @@ class ValidationController():
             if(len(value) > 0):
                 error = value[0]
                 print(error.type)
+
+    def on_livery_grid_check_select(self):
+        self.util.livery_grid_check()

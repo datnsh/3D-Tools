@@ -32,6 +32,11 @@ ITEM_COLOR =  {0:LIGHT_GREEN, 1:RED, 2:YELLOW,3:WHITE}
 
 """UTIL Variables"""
 BUFFER = 20
+#Check result dictionary key
+COUNT = "count"
+DIFF = "diff"
+STATUS_INT = "status int value"
+SKIP_OBJECTS = ['dimensions', 'wheelbase','dimension']
 
 AVAILABLE_LOD = [GHR, G0, G1, G2]
 

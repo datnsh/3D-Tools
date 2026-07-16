@@ -13,6 +13,7 @@ FIRST_BTN_TEXT = 'Check Wheel'
 SECOND_BTN_TEXT = ['Check Wheel Colors','Restore Materials']
 THIRD_BTN_TEXT = ['Check UV2','Restore UV']
 THIRD_GROUP_BOX = 'UV Checker'
+SECOND_FIRST_GROUP = 'Show Livery Grid'
 """Utilities Variables"""
 NAME_PATTERN = r'^([a-zA-Z0-9]+)_LOD([a-zA-Z0-9]+)(?:_([a-zA-Z0-9]+))?$'
 UV2CHECKER = "UV2Checker"

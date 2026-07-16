@@ -8,10 +8,9 @@ paths = [path, TOOLS_PATH]
 for path in paths:
     if path not in sys.path:
         sys.path.append(path)
-
-from polycount_checker.view import poly_checker_ui as ui
-from polycount_checker.model import poly_checker_variables as variables
-from polycount_checker.model import poly_checker_utils as utils
+from ..view import poly_checker_ui as ui
+from ..model import poly_checker_variables as variables
+from ..model import poly_checker_utils as utils
 mods = [ui,utils, variables]
 for mod in mods:
     importlib.reload(mod)
@@ -48,11 +47,12 @@ class PolyController():
     def on_check_btn_clicked(self):
         self.clear_check_table()
         self.set_file_type(self.ui.radio_group.checkedId())
-        self.util.checkPolycount()
+        self.util.check_polycount()
         for lod_name, result in self.util.check_results.items(): # result = [polycount, status]
-            polycount = result[0]
-            status = result[1]
-            self.ui.add_table_item(lod_name, str(polycount), status)
+            polycount = str(result[self.util.count])
+            status = result[self.util.status]
+            diff = result[self.util.diff]
+            self.ui.add_table_item(lod_name, polycount, status,diff)
             #row = self.ui.check_table.rowCount() - 1
             #statusItem = self.ui.check_table.item(row, 2)
             #color = self.get_item_color(status)

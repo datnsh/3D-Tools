@@ -1,7 +1,8 @@
 from pymxs import runtime as rt
-import importlib, copy
-from polycount_checker.model import poly_checker_variables as pv
+import importlib
+from ..model import poly_checker_variables as pv
 importlib.reload(pv)
+from typing import Dict
 
 
 class PolyUtil():
@@ -11,10 +12,17 @@ class PolyUtil():
         self.excluded_obj = self.get_excluded_objects(pv.EXCLUDE)
         self.file_type = pv.BODY_TYPE
         self.invalid_object_list = []
-        self.check_results = {}
+
+        self.check_results : Dict[str, Dict[str,str]] = {}
+        self.count = pv.COUNT
+        self.status = pv.STATUS_INT
+        self.diff = pv.DIFF
+
         self.auto_set_file_type()
         self.init_dicts()
         self.sort_objects()
+        self.validate = 0
+
     def init_dicts(self):
         self.scene_object = self.init_scene_dict([])
         self.scene_polycount = self.init_scene_dict(0)
@@ -84,6 +92,8 @@ class PolyUtil():
         all_objects = []
         for obj in rt.objects:
             if(rt.ClassOf(obj) == rt.Editable_Poly):
+                if(obj.name.lower() in pv.SKIP_OBJECTS):
+                    print("Skipping:",obj.name)
                 all_objects.append(obj)
         return all_objects
     
@@ -209,8 +219,8 @@ class PolyUtil():
                 rt.messageBox(msg)
         return wrapper
     
-    #@add_message
-    def checkPolycount(self):
+    @add_message
+    def check_polycount(self):
         self.reset_polyCount()
         self.sort_objects()
         self.get_polycount()
@@ -221,11 +231,13 @@ class PolyUtil():
                 buffLimit = limit + limit * (pv.BUFFER/100)
                 key = self.format_key(file_type = type, cur_lod = lod)
                 if(count > buffLimit):
+                    if(self.validate == 0):
+                        self.validate = 1
                     diff = int(count - buffLimit)
-                    msg = f"{str(pv.STATUS[1])} {str(diff)}"
-                    self.check_results[key] = [count,msg]
+                    #msg = f"{str(pv.STATUS[1])} {str(diff)}"
+                    self.check_results[key] = {self.count : count,self.diff : diff, self.status : 1}
                 else:
-                    self.check_results[key] = [count,str(pv.STATUS[0])]
+                    self.check_results[key] = {self.count : count, self.diff: 0, self.status : 0}
 
     def format_key(self,file_type: str, cur_lod: str):
         if(self.file_type == pv.RIM_TYPE):
@@ -259,6 +271,16 @@ class PolyUtil():
             )
         """)
         rt.ToggleViewportPolycount()
+def validator():
+        try:
+            util = PolyUtil()
+            util.check_polycount()
+            polycount = {}
+            if(util.validate == 1):
+                polycount['Check lai polycount'] = {}
+            return polycount
+        except Exception as e:
+            print(e)
         
 
 

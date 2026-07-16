@@ -26,6 +26,7 @@ class UpdateFamas():
             self.latest_drop = self.get_latest_drop(newest_item)
             self.last_updated_drop = self.get_latest_drop(newest_item_des)
             self.update_config(constants.LATEST_DROP,self.latest_drop)
+            print("Update config:",self.last_updated_drop)
             self.update_config(constants.LAST_UPDATED_DROP, self.last_updated_drop)
 
     def update_config(self, key : str, value : any):
