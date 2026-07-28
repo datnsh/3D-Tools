@@ -3,10 +3,10 @@ from dataclasses import dataclass
 from pymxs import runtime as rt
 from PySide2 import QtCore
 
-from validation_tool.model import validation_utils as util
-from validation_tool.model import validation_variables as var
-from validation_tool.view import validation_ui as ui
-from validation_tool.model import validation_error as ve
+from ..model import validation_utils as util
+from ..model import validation_variables as var
+from ..view import validation_ui as ui
+from ..model import validation_error as ve
 mods = [util, var, ui,ve]
 for mod in mods:
     importlib.reload(mod)
