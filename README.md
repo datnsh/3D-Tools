@@ -3,8 +3,24 @@
 A collection of Python-based tools developed to automate and streamline common 3D asset production workflows in **Autodesk 3ds Max**.
 
 The project focuses on reducing repetitive manual tasks, improving asset consistency, and providing small utilities that can be integrated into an artist's production workflow.
+# Table of Contents
 
-## Features
+* [Features](#features)
+* [Project Structure](#project-structure)
+* [Tools](#tools)
+* [Extrude Tools](#extrude-tools)
+* [Architecture](#architecture)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Running a Tool](#running-a-tool)
+* [3ds Max Integration](#3ds-max-integration)
+* [Development](#development)
+* [Design Goals](#design-goals)
+* [Tech Stack](#tech-stack-1)
+* [Project Purpose](#project-purpose)
+* [License](#license)
+
+# Features
 
 The project currently contains the following tools:
 
@@ -19,7 +35,7 @@ The project currently contains the following tools:
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 3D-Tools/
