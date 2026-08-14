@@ -1,0 +1,6 @@
+{
+    "source_path": "path_to_get_source_file",
+    "destination_path": "path_to_add_file",
+    "archived_path": "archive_path",
+    "database_path": "replace with your database_path"
+}
